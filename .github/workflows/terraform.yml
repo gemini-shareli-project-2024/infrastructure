@@ -25,8 +25,7 @@ jobs:
       - name: 'Set up Google Cloud credentials'
         run: echo "${{ secrets.TERRAFORM_KEY }}" > $HOME/gcloud-key.json
 
-      - name: 'Export GOOGLE_CREDENTIALS'
-        run: echo "export GOOGLE_CREDENTIALS=$(cat $HOME/gcloud-key.json)" >> $GITHUB_ENV
+      
 
       - name: 'Terraform Init'
         run: terraform -chdir=./terraform init
