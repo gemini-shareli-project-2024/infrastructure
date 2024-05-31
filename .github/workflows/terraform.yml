@@ -25,23 +25,26 @@ jobs:
       - name: 'Set up Google Cloud credentials'
         run: echo "${{ secrets.TERRAFORM_KEY }}" > $HOME/gcloud-key.json
 
+      - name: 'Export GOOGLE_CREDENTIALS'
+        run: echo "export GOOGLE_CREDENTIALS=$(cat $HOME/gcloud-key.json)" >> $GITHUB_ENV
+
       - name: 'Terraform Init'
-        run: terraform init
+        run: terraform -chdir=./terraform init
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_KEY }}
 
       - name: 'Terraform Validate'
-        run: terraform validate
+        run: terraform -chdir=./terraform validate
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_KEY }}
 
       - name: 'Terraform Plan'
-        run: terraform plan -var="google_credentials=${{ secrets.TERRAFORM_KEY }}"
+        run: terraform -chdir=./terraform plan -var="google_credentials=${{ secrets.TERRAFORM_KEY }}"
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_KEY }}
 
       - name: 'Terraform Apply'
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve -var="google_credentials=${{ secrets.TERRAFORM_KEY }}"
+        run: terraform -chdir=./terraform apply -auto-approve -var="google_credentials=${{ secrets.TERRAFORM_KEY }}"
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_KEY }}
