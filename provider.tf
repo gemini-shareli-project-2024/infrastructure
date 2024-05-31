@@ -12,6 +12,11 @@ provider "google" {
   region      = "asia-northeast1-b"
   credentials = file(var.google_credentials)
 }
+variable "google_credentials" {
+  description = "Google Cloud credentials in JSON format"
+  type        = string
+  sensitive   = true
+}
 
 
 
