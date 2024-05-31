@@ -57,10 +57,6 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
 
-    env:
-      GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_KEY }}
-      # Add other secrets as necessary
-
     steps:
       - name: 'Checkout code'
         uses: actions/checkout@v2
@@ -70,21 +66,28 @@ jobs:
         with:
           terraform_version: 1.2.4
 
-      - name: 'Write GCP credentials to file'
-        run: echo "${{ secrets.TERRAFORM_KEY }}" > gcloud-key.json
+      - name: 'Set up Google Cloud credentials'
+        id: gcloud-auth
+        run: echo "${{ secrets.TERRAFORM_KEY }}" > $HOME/gcloud-key.json
 
       - name: 'Terraform Init'
         run: terraform init
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_KEY }}
 
       - name: 'Terraform Validate'
         run: terraform validate
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_KEY }}
 
       - name: 'Terraform Plan'
-        run: terraform plan -var="google_credentials=$(cat gcloud-key.json)"
+        run: terraform plan -var="google_credentials=${{ secrets.TERRAFORM_KEY }}"
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_KEY }}
 
       - name: 'Terraform Apply'
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve -var="google_credentials=$(cat gcloud-key.json)"
-      # On push to "main", build or change infrastructure according to Terraform configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+        run: terraform apply -auto-approve -var="google_credentials=${{ secrets.TERRAFORM_KEY }}"
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_KEY }}
 
