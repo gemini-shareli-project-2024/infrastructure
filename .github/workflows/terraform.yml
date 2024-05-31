@@ -22,28 +22,21 @@ jobs:
         with:
           terraform_version: 1.2.4
 
-      - name: 'Set up Google Cloud credentials'
-        run: echo "${{ secrets.TERRAFORM_KEY }}" > $HOME/gcloud-key.json
-
-      
+      # Authenticate Google Cloud credentials using the secret
+      - name: 'Authenticate Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.TERRAFORM_KEY }}'
 
       - name: 'Terraform Init'
-        run: terraform -chdir=./terraform init
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_KEY }}
+        run: terraform init
 
       - name: 'Terraform Validate'
-        run: terraform -chdir=./terraform validate
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_KEY }}
+        run: terraform validate
 
       - name: 'Terraform Plan'
-        run: terraform -chdir=./terraform plan -var="google_credentials=${{ secrets.TERRAFORM_KEY }}"
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_KEY }}
+        run: terraform plan
 
       - name: 'Terraform Apply'
         if: github.ref == 'refs/heads/main'
-        run: terraform -chdir=./terraform apply -auto-approve -var="google_credentials=${{ secrets.TERRAFORM_KEY }}"
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_KEY }}
+        run: terraform apply -auto-approve
