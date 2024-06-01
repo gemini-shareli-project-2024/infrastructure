@@ -19,7 +19,7 @@ resource "google_storage_bucket" "terraform_state_bucket" {
 resource "google_compute_instance" "default" {
   name         = "shareli"
   machine_type = "e2-standard-2"
-  zone         = "asia-northeast1-b"
+  zone         = "asia-southeast1"
 
   tags = ["http-server", "https-server"]
 
