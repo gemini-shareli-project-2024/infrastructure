@@ -4,7 +4,7 @@ resource "google_service_account" "default" {
 }
 
 resource "google_compute_instance" "default" {
-  name         = "Shareli"
+  name         = "shareli"
   machine_type = "e2-micro"
   zone         = "asia-northeast1-b"
 
