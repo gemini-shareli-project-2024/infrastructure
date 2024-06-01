@@ -8,15 +8,7 @@ terraform {
 }
 
 provider "google" {
-  project     = "shareli-gemini-2024"
-  region      = "asia-northeast1-b"
-  credentials = file(var.google_credentials)
+  project   = "shareli-gemini-2024"
+  region    = "asia-northeast1-b"
+  credentials = file("${{ secrets.TERRAFORM_KEY }}")
 }
-variable "google_credentials" {
-  description = "Google Cloud credentials in JSON format"
-  type        = string
-  sensitive   = true
-}
-
-
-
