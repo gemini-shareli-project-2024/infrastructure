@@ -5,7 +5,7 @@ resource "google_service_account" "default" {
 
 resource "google_storage_bucket" "terraform_state_bucket" {
   name          = "shareli-terraform-state"
-  location      = "asia-northeast1-b" 
+  location      = "asia-southeast1" 
   force_destroy = true 
   storage_class = "STANDARD"
 
@@ -19,7 +19,7 @@ resource "google_storage_bucket" "terraform_state_bucket" {
 resource "google_compute_instance" "default" {
   name         = "shareli"
   machine_type = "e2-standard-2"
-  zone         = "asia-southeast1"
+  zone         = "asia-southeast1-b"
 
   tags = ["http-server", "https-server"]
 
