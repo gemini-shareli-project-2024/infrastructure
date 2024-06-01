@@ -3,6 +3,19 @@ resource "google_service_account" "default" {
   display_name = "Shareli"
 }
 
+resource "google_storage_bucket" "terraform_state_bucket" {
+  name          = "shareli-terraform-state"
+  location      = "asia-northeast1-b" 
+  force_destroy = true 
+  storage_class = "STANDARD"
+
+  versioning {
+    enabled = true
+  }
+
+  uniform_bucket_level_access = true
+}
+
 resource "google_compute_instance" "default" {
   name         = "shareli"
   machine_type = "e2-standard-2"
@@ -29,11 +42,17 @@ resource "google_compute_instance" "default" {
     foo = "bar"
   }
 
-  metadata_startup_script = "apt-get update -y && sudo apt-get install -y docker.io"
+  metadata_startup_script = "apt-get update -y && sudo apt-get install -y docker.io && sudo usermod -aG docker $USER "
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
     email  = google_service_account.default.email
     scopes = ["cloud-platform"]
+  }
+}
+terraform {
+  backend "gcs" {
+    bucket  = "shareli-terraform-state"
+    prefix  = "terraform/state"
   }
 }
