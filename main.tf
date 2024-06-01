@@ -1,7 +1,7 @@
-# resource "google_service_account" "default" {
-#   account_id   = "terraform-user"
-#   display_name = "Shareli"
-# }
+resource "google_service_account" "default" {
+  account_id   = "terraform"
+  display_name = "Shareli"
+}
 
 resource "google_compute_instance" "default" {
   name         = "Shareli"
