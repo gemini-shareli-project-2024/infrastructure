@@ -5,7 +5,7 @@ resource "google_service_account" "default" {
 
 resource "google_compute_instance" "default" {
   name         = "shareli"
-  machine_type = "e2-micro"
+  machine_type = "e2-standard-2"
   zone         = "asia-northeast1-b"
 
   tags = ["http-server", "https-server"]
@@ -13,6 +13,7 @@ resource "google_compute_instance" "default" {
   boot_disk {
     initialize_params {
       image = "ubuntu-os-cloud/ubuntu-2004-lts"
+      size  = 20
     }
   }
 
