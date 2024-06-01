@@ -50,9 +50,9 @@ resource "google_compute_instance" "default" {
     scopes = ["cloud-platform"]
   }
 }
-terraform {
-  backend "gcs" {
-    bucket  = "shareli-terraform-state"
-    prefix  = "terraform/state"
-  }
-}
+# terraform {
+#   backend "gcs" {
+#     bucket  = "shareli-terraform-state"
+#     prefix  = "terraform/state"
+#   }
+# }
