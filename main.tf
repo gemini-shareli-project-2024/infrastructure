@@ -3,18 +3,6 @@ resource "google_service_account" "default" {
   display_name = "Shareli"
 }
 
-resource "google_storage_bucket" "terraform_state_bucket" {
-  name          = "shareli-terraform-state"
-  location      = "asia-southeast1" 
-  force_destroy = true 
-  storage_class = "STANDARD"
-
-  versioning {
-    enabled = true
-  }
-
-  uniform_bucket_level_access = true
-}
 
 resource "google_compute_instance" "default" {
   name         = "shareli"
